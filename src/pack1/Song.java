@@ -5,60 +5,26 @@ import java.util.*;
 
 public class Song<T> {
     public static void main(String[] args) throws IOException {
-//      Song song1 = new Song(1000000,"Wonderful",2.22,2019);
-//      song1.setId(8473242);
-//      song1.setName("Wonderful U");
-//      song1.setArtist("AGA");
-//      System.out.println(song1.toString());
-//      System.out.println("The song id is: "+song1.getId()+" artist is: "+song1.getArtist()+"the year is: "+song1.getYear());
-//      Song song2 = new Song(7417018,1,"Temptations",2020);
-//      System.out.println("The id 7417018 get the wrong name of the song: "+song2.getName());
-//      Song song3 = new Song(1000000,1,1,1);
-//      System.out.println(song3.toString());
-
-      //Test the readSongs method
-      Song[] songs = readSongs("C:/Users/Kev/eclipse-workspace/GenderMag2/song_table.txt");
-      for (Song song : songs) {
-          System.out.println(song);
-      }
+      SongComparator2 songComparator2 = new SongComparator2(); //Compare by year then name
+      KZHeap<String[]> songHeap = new KZHeap<>(songComparator2);
       System.out.println("_______________");
-      LinkedList<Song> songsList = readSongs_link("C:/Users/Kev/eclipse-workspace/GenderMag2/song_table.txt");
+      //Create a linked List
+      LinkedList<Song> songsList = readSongs_link("/Users/kevin/java-workspace/GenderMag2/song_table.txt");
       for (Song song : songsList) {
           System.out.println(song);
       }
 
-//      Song[] songs = new Song[5];
-//      songs[0] = new Song("1", "Bohemian Rhapsody", "Queen", "1975");
-//      songs[1] = new Song("2", "Hotel California", "Eagles", "1976");
-//      songs[2] = new Song("3", "Wonderwall", "Oasis", "2020");
-//      songs[3] = new Song("4", "My Heart Will Go On", "Celine Dion", "1997");
-//      songs[4] = new Song("5", "Another Brick in the Wall", "Pink Floyd", "1979");
-//
-//      Song[] songByName = SearchSongs.searchSongsByName(songs, "Wonderwall");
-//      //Song[] songByName = SearchSongs.searchSongsByName(songs, "Wonderwal");
-//
-//      if (songByName != null && songByName.length > 0) {
-//          System.out.println("Song(s) found by name: ");
-//          for (Song song : songByName) {
-//              System.out.println(song.getName());
-//          }
-//      } else {
-//          System.out.println("Song not found by name");
-//      }
-//
-//      List<Song> songs1 = new ArrayList<>();
-//      songs1.add(new Song("1", "Bohemian Rhapsody", "Queen", "1975"));
-//      songs1.add(new Song("2", "Hotel California", "Eagles", "1976"));
-//      songs1.add(new Song("3", "Wonderwall", "Oasis", "2020"));
-//      songs1.add(new Song("4", "My Heart Will Go On", "Celine Dion", "1997"));
-//      songs1.add(new Song("5", "Another Brick in the Wall", "Pink Floyd", "1979"));
-//
-//      List<Song> matchingSongs = SearchSongs.searchSongsByYearAndName(songs1, "1975", "Bohemian Rhapsody");
-//      System.out.println("Songs found by year and name: ");
-//      for (Song song : matchingSongs) {
-//          System.out.println(song.getName());
-//      }
-
+      for (Song song : songsList) {
+          String[] songArray = {song.getId().toString(), song.getName().toString(), song.getArtist().toString(), song.getYear().toString()};
+          songHeap.addSong(songArray);
+      }
+      
+      System.out.println("Contents of the songHeap sorted:");
+      while (!songHeap.isEmpty()) {
+          String[] song = songHeap.removeSong();
+          System.out.println("Song ID: " + song[0] + ", Name: " + song[1] + ", Artist: " + song[2] + ", Year: " + song[3]);
+      }
+      
   }
     public Song(String trim, String name, String artist, String language, String year) {
     }
@@ -120,6 +86,9 @@ public class Song<T> {
 
     public void setYear(T year) {
         this.year = year;
+    }
+    public String[] toArray() {
+        return new String[]{id.toString(), name.toString(), artist.toString(), year.toString()};
     }
 
     //displayAllSongs Method:
